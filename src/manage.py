@@ -11,6 +11,7 @@ def main():
     if sys.argv[1].lower() == "test":
         print("NOTE: Running black formatting")
         subprocess.run(["black", "--config", ".black.toml", "."])
+        subprocess.run(["isort", "."])
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
