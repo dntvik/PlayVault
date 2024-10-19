@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "api",
     "blog",
     "common",
-    "playvault",
+    "games",
 ]
 
 MIDDLEWARE = [
