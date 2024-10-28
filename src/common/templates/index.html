@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - PlayVault</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the PlayVault</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'games:game_list' %}">All Games</a></li>
+                <li><a href="{% url 'games:wishlist' %}">Wishlist</a></li>
+                <li><a href="{% url 'games:completed_games' %}">Completed Games</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Browse by Genre</h2>
+        <div class="category-grid">
+            {% for genre in genres %}
+                <div class="category-item">
+                    <a href="{% url 'genres_list' genre.id %}">
+                        <h3>{{ genre.name }}</h3>
+                        <p>Explore all games in this genre</p>
+                    </a>
+                </div>
+            {% empty %}
+                <p>No genres available.</p>
+            {% endfor %}
+        </div>
+
+        <h2>Browse by Platform</h2>
+        <div class="category-grid">
+            {% for platform in platforms %}
+                <div class="category-item">
+                    <a href="{% url 'platforms_list' platform.id %}">
+                        <h3>{{ platform.name }}</h3>
+                        <p>Explore all games on this platform</p>
+                    </a>
+                </div>
+            {% empty %}
+                <p>No platforms available.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 PlayVault. All rights reserved.</p>
+    </footer>
+</body>
+</html>

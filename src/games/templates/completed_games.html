@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h2>Your Completed Games</h2>
+<ul>
+    {% for game in completed_games %}
+        <li>{{ game.game.title }} - Completed on {{ game.completed_date }}</li>
+    {% empty %}
+        <li>You have not completed any games yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
