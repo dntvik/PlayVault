@@ -1,15 +1,15 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 from accounts.managers import CustomManager
 
 
-class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(_("name"), max_length=150)
+class UserProfile(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(_("name"), max_length=150, unique=True)
     email = models.EmailField(
         _("email address"),
         unique=True,
@@ -29,6 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."
         ),
     )
+    phone_number = PhoneNumberField(unique=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     birth_date = models.DateTimeField(_("birth date"), null=True, blank=True)
     photo = models.ImageField(_("photo"), upload_to="img/profiles/", null=True, blank=True)
@@ -47,21 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.email = self.__class__.objects.normalize_email(self.email)
 
     def get_short_name(self):
-        """Return the short name for the user."""
         return self.username
 
     def get_registration_duration(self):
         return f"Time on site: {timezone.now() - self.date_joined}"
-
-
-class BaseModel(models.Model):
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
-    edit_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)

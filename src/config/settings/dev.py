@@ -8,15 +8,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-INSTALLED_APPS += []  # NOQA
-
+INSTALLED_APPS += ["debug_toolbar"]  # NOQA
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",  # NOQA
     }
 }
-
+INTERNAL_IPS = [
+    "localhost",
+    "127.0.0.1",
+    "0.0.0.0",
+]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 

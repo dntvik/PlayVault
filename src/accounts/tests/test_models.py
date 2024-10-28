@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from django.test import TestCase
 
 
 class UserModelTest(TestCase):
 
     def setUp(self):
-        self.user = get_user_model()(email="test@example.com")
-        self.user.set_password("testpassword123")
-        self.user.username = "TestUser"
-        self.user.save()
+        self.user = get_user_model().objects.create_user(
+            email="test@example.com", password="testpassword123", username="TestUser", phone_number="+1234567890"
+        )
 
     def test_user_creation(self):
         self.assertEqual(self.user.email, "test@example.com")
@@ -28,3 +28,17 @@ class UserModelTest(TestCase):
     def test_registration_duration(self):
         duration = self.user.get_registration_duration()
         self.assertIn("Time on site", duration)
+
+    def test_username_unique(self):
+        with self.assertRaises(IntegrityError):
+            get_user_model().objects.create_user(
+                email="another@example.com",
+                password="password",
+                username="TestUser",
+            )
+
+    def test_phone_number_unique(self):
+        with self.assertRaises(IntegrityError):
+            get_user_model().objects.create_user(
+                email="another@example.com", password="password", username="AnotherUser", phone_number="+1234567890"
+            )

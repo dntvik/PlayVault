@@ -11,13 +11,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "phonenumber_field",
+    "djmoney",
+    "social_django",
+    "django_extensions",
     "accounts",
     "api",
     "blog",
     "common",
     "games",
 ]
-AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.UserProfile"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -26,6 +30,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
