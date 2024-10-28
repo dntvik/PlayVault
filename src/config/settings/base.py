@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     "api",
     "blog",
     "common",
-    "games",
+    "games.apps.YourAppConfig",
 ]
 AUTH_USER_MODEL = "accounts.UserProfile"
 

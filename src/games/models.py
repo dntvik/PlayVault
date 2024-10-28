@@ -9,11 +9,21 @@ from games.utils.game_choises import GameСhoises
 class Genre(models.Model):
     name = models.CharField(max_length=100, choices=GameСhoises.GENRE_CHOICES)
 
+    def __str__(self):
+        return self.name
+
+
+class Platform(models.Model):
+    name = models.CharField(max_length=100, choices=GameСhoises.PLATFORM_CHOICES)
+
+    def __str__(self):
+        return self.name
+
 
 class Game(models.Model):
     title = models.CharField(max_length=255)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
-    platform = models.CharField(max_length=100, choices=GameСhoises.PLATFORM_CHOICES)
+    platform = models.ForeignKey(Platform, on_delete=models.CASCADE)
     release_year = models.IntegerField()
     description = models.TextField()
     cover_image = models.ImageField(upload_to="covers/")
