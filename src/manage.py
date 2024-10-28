@@ -10,8 +10,8 @@ def main():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
     if sys.argv[1].lower() == "test":
         print("NOTE: Running black formatting")
-        subprocess.run(["black", "--config", ".black.toml", "."])
         subprocess.run(["isort", "."])
+        subprocess.run(["black", "--config", ".black.toml", "."])
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
