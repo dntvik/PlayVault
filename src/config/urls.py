@@ -11,4 +11,6 @@ urlpatterns = [
     path("games/", include("games.urls")),
     path("genres/<int:id>/", GenreDetailView.as_view(), name="genres_list"),
     path("platforms/<int:id>/", PlatformDetailView.as_view(), name="platforms_list"),
+    path("api-auth/", include("rest_framework.urls")),
+    path("api/", include("api.urls")),
 ] + debug_toolbar_urls()
