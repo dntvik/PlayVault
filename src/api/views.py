@@ -1,7 +1,8 @@
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
+from api.permissions import IsSuperUser
 from api.serializers import (
     CompletedGamesSerializer,
     GameSerializer,
@@ -14,10 +15,16 @@ from api.serializers import (
 from games.models import CompletedGames, Game, Genre, Platform, PurchaseHistory, Review, Wishlist
 
 
-class GenreViewSet(ModelViewSet):
+class GenreViewAPISet(ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSuperUser]
+
+
+class GameViewAPISet(ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = [IsSuperUser]
 
 
 class GameListAPIView(ListAPIView):
@@ -26,39 +33,32 @@ class GameListAPIView(ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class GameRetrieveAPIView(RetrieveAPIView):
-    queryset = Game.objects.all()
-    serializer_class = GameSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
 class PlatformListAPIView(ListAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class PlatformCreateView(CreateAPIView):
+class PlatformCreateAPIView(CreateAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUser]
 
 
-class PlatformRetrieveView(RetrieveAPIView):
+class PlatformRetrieveAPIView(RetrieveAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
 
 
-class PlatformUpdateView(UpdateAPIView):
+class PlatformUpdateAPIView(UpdateAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUser]
 
 
-class PlatformDeleteView(DestroyAPIView):
+class PlatformDeleteAPIView(DestroyAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUser]
 
 
 class ReviewListAPIView(ListAPIView):
@@ -70,12 +70,10 @@ class ReviewListAPIView(ListAPIView):
 class ReviewRetrieveAPIView(RetrieveAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class PurchaseHistoryListAPIView(ListAPIView):
     serializer_class = PurchaseHistorySerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -84,7 +82,6 @@ class PurchaseHistoryListAPIView(ListAPIView):
 
 class PurchaseHistoryRetrieveAPIView(RetrieveAPIView):
     serializer_class = PurchaseHistorySerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -93,7 +90,6 @@ class PurchaseHistoryRetrieveAPIView(RetrieveAPIView):
 
 class WishlistListAPIView(ListAPIView):
     serializer_class = WishlistSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -102,7 +98,6 @@ class WishlistListAPIView(ListAPIView):
 
 class WishlistRetrieveAPIView(RetrieveAPIView):
     serializer_class = WishlistSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -111,7 +106,6 @@ class WishlistRetrieveAPIView(RetrieveAPIView):
 
 class CompletedGamesListAPIView(ListAPIView):
     serializer_class = CompletedGamesSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -120,7 +114,6 @@ class CompletedGamesListAPIView(ListAPIView):
 
 class CompletedGamesRetrieveAPIView(RetrieveAPIView):
     serializer_class = CompletedGamesSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user

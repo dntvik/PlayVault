@@ -31,7 +31,10 @@ class GenreSerializer(ModelSerializer):
 class PlatformSerializer(ModelSerializer):
     class Meta:
         model = Platform
-        fields = ["id", "name"]
+        fields = [
+            "id",
+            "name",
+        ]
 
 
 class ReviewSerializer(ModelSerializer):
@@ -48,7 +51,7 @@ class PurchaseHistorySerializer(ModelSerializer):
 
     class Meta:
         model = PurchaseHistory
-        fields = ["id", "user", "game", "purchase_date"]
+        fields = ["id", "user", "game", "purchase_date", "price_at_purchase"]
 
 
 class WishlistSerializer(ModelSerializer):
