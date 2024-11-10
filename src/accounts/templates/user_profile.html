@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h2>User Profile</h2>
+    <div class="profile-card">
+        <div class="profile-header">
+            {% if user_profile.photo %}
+            <img alt="{{ user_profile.first_name }}" height="50" src="{{ user_profile.photo.url }}"
+                 width="50">
+            {% else %}
+            <p>The profile doesn't have a photo.</p>
+            {% endif %}
+            <h3>{{ user_profile.user.first_name}} {{ user_profile.user.last_name }}</h3>
+            <p>User Type: {{ user_profile.get_user_type_display }}</p>
+        </div>
+        <div class="profile-details">
+            <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
+            <p><strong>Gender:</strong> {{ user_profile.get_sex_display }}</p>
+            <p><strong>Location:</strong> {{ user_profile.location }}</p>
+            <p><strong>Phone Number:</strong> {{ user_profile.phone_number }}</p>
+            <p><strong>Birthday:</strong> {{ user_profile.birthday|date:"Y-m-d" }}</p>
+        </div>
+        <div class="profile-actions">
+            <a class="btn btn-secondary" href="{% url 'index' %}">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
