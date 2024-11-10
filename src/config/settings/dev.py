@@ -3,7 +3,6 @@ import os
 import mongoengine
 
 from config.settings.base import *  # NOQA
-from config.settings.base import BASE_DIR  # NOQA
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-m%w$#lw&*t3w*@bj2l(92(p7aqubc0vl5z9(u)l!0mul^q-b6@"
@@ -11,7 +10,7 @@ SECRET_KEY = "django-insecure-m%w$#lw&*t3w*@bj2l(92(p7aqubc0vl5z9(u)l!0mul^q-b6@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0", "localhost"]
 
 INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # NOQA
 

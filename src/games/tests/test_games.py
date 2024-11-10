@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from djmoney.money import Money
 
-from games.models import CompletedGames, Game, Genre, Platform, Review, Wishlist
+from games.models import (CompletedGames, Game, Genre, Platform, Review,
+                          Wishlist)
 
 
 def create_sample_game(title="Sample Game", genre=None, platform=None, release_year=2020, price=Money(29.99, "USD")):
