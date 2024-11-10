@@ -12,7 +12,6 @@ services:
       - ./commands:/playvault/commands
       - static_content:/playvault/src/static
       - media_content:/playvault/src/media
-      - pip_cache:/root/.cache/pip
     env_file:
       - .env
     depends_on:
@@ -79,7 +78,6 @@ services:
       - backend
 
 volumes:
-  pip_cache: { }
   pg_data: { }
   pg_admin: { }
   mongo_data: { }
