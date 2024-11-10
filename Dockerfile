@@ -8,9 +8,10 @@ WORKDIR /playvault
 
 COPY .black.toml .black.toml
 COPY .flake8 .flake8
-COPY ./src ./src
 COPY ./requirements.txt ./requirements.txt
 COPY ./commands ./commands
+RUN mkdir -p /root/.cache/pip
+COPY ./src ./src
 
 RUN python -m pip install --upgrade pip && pip install --no-cache-dir -r ./requirements.txt
 CMD ["bin/sh"]

@@ -7,11 +7,13 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
     if sys.argv[1].lower() == "test":
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
         print("NOTE: Running black formatting")
         subprocess.run(["isort", "."])
         subprocess.run(["black", "--config", ".black.toml", "."])
+    else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

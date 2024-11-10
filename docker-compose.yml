@@ -10,8 +10,9 @@ services:
     volumes:
       - ./src:/playvault/src
       - ./commands:/playvault/commands
-      - static_content:/playvault/src/staticfiles
+      - static_content:/playvault/src/static
       - media_content:/playvault/src/media
+      - pip_cache:/root/.cache/pip
     env_file:
       - .env
     depends_on:
@@ -67,7 +68,7 @@ services:
     image: nginx:1.27
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - static_content:/playvault/src/staticfiles
+      - static_content:/playvault/src/static
       - media_content:/playvault/src/media
     ports:
       - '80:80'
@@ -78,6 +79,7 @@ services:
       - backend
 
 volumes:
+  pip_cache: { }
   pg_data: { }
   pg_admin: { }
   mongo_data: { }
