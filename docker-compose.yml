@@ -4,9 +4,9 @@ services:
     container_name: playvault_container
     working_dir: /playvault
     ports:
-      - "8008:8008"
+      - ${LOCAL_PORT}:${WSGI_PORT}
     command:
-      - ./commands/start_server_dev.sh
+      - ./commands/start_server_${MODE}.sh
     volumes:
       - ./src:/playvault/src
       - ./commands:/playvault/commands
