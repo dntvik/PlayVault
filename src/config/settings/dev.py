@@ -1,5 +1,7 @@
 import os
 
+import mongoengine
+
 from config.settings.base import *  # NOQA
 from config.settings.base import BASE_DIR  # NOQA
 
@@ -12,6 +14,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # NOQA
+
+mongoengine.connect(
+    host=os.environ.get('DJANGO_MONGO_CONNECTION')
+)
+
 if os.environ.get("GITHUB_WORKFLOW"):
     DATABASES = {
         "default": {
