@@ -5,15 +5,24 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from api.serializers import PlatformSerializer
-from api.views import (CompletedGamesListAPIView,
-                       CompletedGamesRetrieveAPIView, GameListAPIView,
-                       GameViewAPISet, GenreViewAPISet, PlatformCreateAPIView,
-                       PlatformDeleteAPIView, PlatformListAPIView,
-                       PlatformRetrieveAPIView, PlatformUpdateAPIView,
-                       PurchaseHistoryListAPIView,
-                       PurchaseHistoryRetrieveAPIView, ReviewListAPIView,
-                       ReviewRetrieveAPIView, WishlistListAPIView,
-                       WishlistRetrieveAPIView)
+from api.views import (
+    CompletedGamesListAPIView,
+    CompletedGamesRetrieveAPIView,
+    GameListAPIView,
+    GameViewAPISet,
+    GenreViewAPISet,
+    PlatformCreateAPIView,
+    PlatformDeleteAPIView,
+    PlatformListAPIView,
+    PlatformRetrieveAPIView,
+    PlatformUpdateAPIView,
+    PurchaseHistoryListAPIView,
+    PurchaseHistoryRetrieveAPIView,
+    ReviewListAPIView,
+    ReviewRetrieveAPIView,
+    WishlistListAPIView,
+    WishlistRetrieveAPIView,
+)
 
 schema_view = get_schema_view(
     openapi.Info(

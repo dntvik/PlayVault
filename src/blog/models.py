@@ -1,8 +1,14 @@
 from datetime import datetime
 
-from mongoengine import (DateTimeField, Document, EmbeddedDocument,
-                         EmbeddedDocumentField, IntField, ListField,
-                         StringField)
+from mongoengine import (
+    DateTimeField,
+    Document,
+    EmbeddedDocument,
+    EmbeddedDocumentField,
+    IntField,
+    ListField,
+    StringField,
+)
 
 
 class Blog(EmbeddedDocument):

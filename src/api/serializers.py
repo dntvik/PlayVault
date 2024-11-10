@@ -3,8 +3,7 @@ from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
 from rest_framework.serializers import ModelSerializer
 
-from games.models import (CompletedGames, Game, Genre, Platform,
-                          PurchaseHistory, Review, Wishlist)
+from games.models import CompletedGames, Game, Genre, Platform, PurchaseHistory, Review, Wishlist
 
 
 class GameSerializer(ModelSerializer):

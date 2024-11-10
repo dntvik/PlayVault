@@ -1,16 +1,18 @@
-from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView)
+from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from api.permissions import IsSuperUser
-from api.serializers import (CompletedGamesSerializer, GameSerializer,
-                             GenreSerializer, PlatformSerializer,
-                             PurchaseHistorySerializer, ReviewSerializer,
-                             WishlistSerializer)
-from games.models import (CompletedGames, Game, Genre, Platform,
-                          PurchaseHistory, Review, Wishlist)
+from api.serializers import (
+    CompletedGamesSerializer,
+    GameSerializer,
+    GenreSerializer,
+    PlatformSerializer,
+    PurchaseHistorySerializer,
+    ReviewSerializer,
+    WishlistSerializer,
+)
+from games.models import CompletedGames, Game, Genre, Platform, PurchaseHistory, Review, Wishlist
 
 
 class GenreViewAPISet(ModelViewSet):

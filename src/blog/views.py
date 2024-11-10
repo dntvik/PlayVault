@@ -9,9 +9,16 @@ def create_blog(request):
     faker = Faker("UK")
 
     saves_data = Entity(
-        blog=[Blog(name=faker.word(), text=faker.paragraph(nb_sentences=5),
-                   author=faker.first_name(), rating=random.randint(1, 10)) for _ in range(5)],
-        headline=faker.paragraph(nb_sentences=1)
+        blog=[
+            Blog(
+                name=faker.word(),
+                text=faker.paragraph(nb_sentences=5),
+                author=faker.first_name(),
+                rating=random.randint(1, 10),
+            )
+            for _ in range(5)
+        ],
+        headline=faker.paragraph(nb_sentences=1),
     ).save()
 
     return HttpResponse(f"Done: {saves_data}")
