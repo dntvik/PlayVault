@@ -12,7 +12,7 @@ class GameListView(ListView):
 
 class GenreDetailView(ListView):
     model = Game
-    template_name = "genres_list.html"
+    template_name = "genres_list.html"  # Создайте этот шаблон
     context_object_name = "games"
 
     def get_queryset(self):

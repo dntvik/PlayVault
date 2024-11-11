@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework.test import APIClient, APITestCase
 
 from games.models import Game, Genre, Platform
@@ -15,12 +17,12 @@ class GameAPITests(APITestCase):
         self.platform = Platform.objects.create(name="PC")
         self.game = Game.objects.create(
             title="Test Game",
+            genre=self.genre,
+            platform=self.platform,
             release_year=2023,
             description="A test game description",
             price=59.99,
         )
-        self.game.genre.set([self.genre])
-        self.game.platform.set([self.platform])
         self.user = get_user_model()(email="user@example.com")
         self.user.set_password("qwerty1234")
         self.user.save()

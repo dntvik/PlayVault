@@ -22,11 +22,11 @@ class Platform(models.Model):
 
 class Game(models.Model):
     title = models.CharField(max_length=255)
-    genre = models.ManyToManyField(Genre)
-    platform = models.ManyToManyField(Platform)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    platform = models.ForeignKey(Platform, on_delete=models.CASCADE)
     release_year = models.IntegerField()
     description = models.TextField()
-    cover_image = models.ImageField(upload_to="covers/", blank=True)
+    cover_image = models.ImageField(upload_to="covers/")
     price = MoneyField(max_digits=14, decimal_places=2, default_currency="USD")
     purchase_link = models.URLField()
 

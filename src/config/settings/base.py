@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "djmoney",
     "social_django",
+    "django_extensions",
     "accounts",
     "api",
     "blog",
