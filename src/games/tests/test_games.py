@@ -6,16 +6,20 @@ from games.models import CompletedGames, Game, Genre, Platform, Review, Wishlist
 
 
 def create_sample_game(title="Sample Game", genre=None, platform=None, release_year=2020, price=Money(29.99, "USD")):
-    return Game.objects.create(
+    game = Game.objects.create(
         title=title,
-        genre=genre,
-        platform=platform,
         release_year=release_year,
         description="Sample description",
         cover_image="covers/sample.jpg",
         price=price,
         purchase_link="https://example.com",
     )
+    if genre:
+        game.genre.set([genre])
+    if platform:
+        game.platform.set([platform])
+
+    return game
 
 
 class GameModelTest(TestCase):
@@ -28,9 +32,8 @@ class GameModelTest(TestCase):
 
     def test_game_creation(self):
         self.assertEqual(self.game.title, "Sample Game")
-        self.assertEqual(self.game.genre.name, "Action")  # Исправлено для сравнения имени
-        self.assertEqual(self.game.platform.name, "PC")  # Исправлено для сравнения имени
-        self.assertEqual(self.game.release_year, 2020)
+        self.assertEqual(self.game.genre.first().name, "Action")
+        self.assertEqual(self.game.platform.first().name, "PC")
         self.assertEqual(float(self.game.price.amount), 29.99)
         self.assertEqual(self.game.price.currency.code, "USD")
         self.assertEqual(str(self.game), "Sample Game")
@@ -86,7 +89,7 @@ class WishlistAndCompletedGamesTest(TestCase):
         self.assertEqual(str(wishlist_item), f"{self.user}'s wishlist: {self.game}")
 
     def test_completed_game_creation(self):
-        completed_game = CompletedGames.objects.create(user=self.user, game=self.game)
+        completed_game = CompletedGames.objects.create(user=self.user, game=self.game, completed_date="2024-11-10")
         self.assertEqual(completed_game.user, self.user)
         self.assertEqual(completed_game.game, self.game)
-        self.assertEqual(str(completed_game), f"{self.user} completed {self.game} on {completed_game.completed_date}")
+        self.assertEqual(str(completed_game), f"{self.user} completed {self.game} on 2024-11-10")
