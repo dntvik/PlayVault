@@ -1,10 +1,10 @@
-FROM python:3.13-alpine3.20
+FROM python:3.12.7-alpine3.20
 
 RUN apk update
 RUN apk upgrade --no-cache
-RUN mkdir /PlayVault
+RUN mkdir /playvault
 
-WORKDIR /PlayVault
+WORKDIR /playvault
 
 COPY .black.toml .black.toml
 COPY .flake8 .flake8
