@@ -6,7 +6,13 @@ from django.urls import include, path
 
 from accounts.views import UserLogin, UserLogout, UserProfileView, UserRegistration, generate_accounts_view
 from common.views import IndexView
-from games.views import GenreDetailView, PlatformDetailView
+from games.views import (
+    GenreDetailView,
+    PlatformDetailView,
+    generate_games_view,
+    generate_reviews_view,
+    generate_wishlist_view,
+)
 
 urlpatterns = (
     [
@@ -24,6 +30,9 @@ urlpatterns = (
         path("api/", include("api.urls")),
         path("blog/", include("blog.urls")),
         path("generate_accounts/", generate_accounts_view, name="generate_accounts"),
+        path("generate_games/", generate_games_view, name="generate_games"),
+        path("generate_reviews/", generate_reviews_view, name="generate_reviews"),
+        path("generate_wishlist/", generate_wishlist_view, name="generate_wishlist"),
     ]
     + debug_toolbar_urls()  # NOQA W503
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # NOQA W503

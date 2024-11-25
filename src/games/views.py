@@ -1,7 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.views.generic import ListView
 
 from games.models import CompletedGames, Game, Wishlist
+from games.tasks import generate_games, generate_reviews, generate_wishlist
 
 
 class GameListView(ListView):
@@ -44,3 +46,21 @@ class CompletedGamesView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return CompletedGames.objects.filter(user=self.request.user)
+
+
+def generate_games_view(request):
+    count = int(request.GET.get("count", 100))
+    generate_games.delay(count)
+    return HttpResponse(f"Task to generate {count} games has started.")
+
+
+def generate_reviews_view(request):
+    count = int(request.GET.get("count", 100))
+    generate_reviews.delay(count)
+    return HttpResponse(f"Task to generate {count} reviews has started.")
+
+
+def generate_wishlist_view(request):
+    count = int(request.GET.get("count", 100))
+    generate_wishlist.delay(count)
+    return HttpResponse(f"Task to generate {count} wishlist entries has started.")
