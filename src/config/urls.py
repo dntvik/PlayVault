@@ -4,7 +4,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from accounts.views import UserLogin, UserLogout, UserProfileView, UserRegistration, generate_accounts_view
+from accounts.views import (
+    UserActivationView,
+    UserLogin,
+    UserLogout,
+    UserProfileView,
+    UserRegistration,
+    generate_accounts_view,
+)
 from common.views import IndexView
 from games.views import (
     GenreDetailView,
@@ -18,6 +25,7 @@ urlpatterns = (
     [
         path("", IndexView.as_view(), name="index"),
         path("registration/", UserRegistration.as_view(), name="registration"),
+        path("activate/<str:uuid64>/<str:token>/", UserActivationView.as_view(), name="activate_user"),
         path("login/", UserLogin.as_view(), name="login"),
         path("logout/", UserLogout.as_view(), name="logout"),
         path("profile/", UserProfileView.as_view(), name="user_profile"),
