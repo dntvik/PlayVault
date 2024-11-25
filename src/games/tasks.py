@@ -1,11 +1,11 @@
 import random
+from decimal import Decimal
 
 import requests
-from django.apps import apps
-from faker import Faker
 from celery import shared_task
-from decimal import Decimal
+from django.apps import apps
 from django.core.files.base import ContentFile
+from faker import Faker
 
 from games.models import Genre, Platform
 
@@ -35,12 +35,13 @@ def generate_games(model_name, count):
                 release_year=faker.year(),
                 description=faker.text(),
                 price=Decimal(faker.random_number(digits=4)),
-                purchase_link=faker.url()
+                purchase_link=faker.url(),
             )
             if image_content:
                 game.cover_image.save(file_name, image_content, save=False)
             games.append(game)
         Model.objects.bulk_create(games)
+
 
 @shared_task
 def generate_reviews(count):
@@ -72,3 +73,36 @@ def generate_reviews(count):
             )
 
         Review.objects.bulk_create(reviews)
+
+
+@shared_task
+def generate_wishlist(count):
+    Wishlist = apps.get_model("games", "Wishlist")
+    Game = apps.get_model("games", "Game")
+    UserProfile = apps.get_model("accounts", "UserProfile")
+
+    games = list(Game.objects.all())
+    users = list(UserProfile.objects.all())
+
+    if not games or not users:
+        raise ValueError("There are no games or users available to create a wishlist.")
+
+    batch_size = 100
+
+    for start in range(0, count, batch_size):
+        end = min(start + batch_size, count)
+        wishlists = []
+
+        for _ in range(start, end):
+            user = random.choice(users)
+            game = random.choice(games)
+
+            if not Wishlist.objects.filter(user=user, game=game).exists():
+                wishlists.append(
+                    Wishlist(
+                        user=user,
+                        game=game,
+                    )
+                )
+
+        Wishlist.objects.bulk_create(wishlists)
