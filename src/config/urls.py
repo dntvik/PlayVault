@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from accounts.views import UserLogin, UserLogout, UserProfileView, UserRegistration
+from accounts.views import UserLogin, UserLogout, UserProfileView, UserRegistration, generate_accounts_view
 from common.views import IndexView
 from games.views import GenreDetailView, PlatformDetailView
 
@@ -23,6 +23,7 @@ urlpatterns = (
         path("api-auth/", include("rest_framework.urls")),
         path("api/", include("api.urls")),
         path("blog/", include("blog.urls")),
+        path("generate_accounts/", generate_accounts_view, name="generate_accounts"),
     ]
     + debug_toolbar_urls()  # NOQA W503
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # NOQA W503
