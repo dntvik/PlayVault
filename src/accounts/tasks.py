@@ -16,7 +16,7 @@ def generate_accounts(model_name, count):
         Model.objects.bulk_create(
             [
                 Model(
-                    username=faker.name(),
+                    title=faker.name(),
                     email=faker.unique.email(),
                     phone_number=faker.unique.phone_number(),
                     birth_date=faker.date_of_birth(minimum_age=18, maximum_age=65),
