@@ -32,7 +32,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     phone_number = PhoneNumberField(unique=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     birth_date = models.DateTimeField(_("birth date"), null=True, blank=True)
-    photo = models.ImageField(_("photo"), upload_to="img/profiles/", null=True, blank=True)
+    photo = models.ImageField(upload_to="users_avatars/", default="../static/img/default_avatar.jpg")
 
     objects = CustomManager()
 

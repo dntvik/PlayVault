@@ -1,4 +1,4 @@
 Hi, {{ user.first_name|title }} {{ user.last_name|title }}.
 <p>Please follow the link to complete the registration !!!</p>
-<a href="https://{{ domain }}{% url 'activate_user' token=token uuid64=uid %}"> Link to registration!!!</a>
+<a href="http://{{ domain }}{% url 'activate_user' token=token uuid64=uid %}"> Link to registration!!!</a>
 <p> Current time: {{ current_time }}</p>
