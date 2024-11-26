@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "blog",
     "common",
     "games.apps.YourAppConfig",
+    "cart",
 ]
 AUTH_USER_MODEL = "accounts.UserProfile"
 

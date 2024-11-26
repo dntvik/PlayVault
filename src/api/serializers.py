@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
 from rest_framework.serializers import ModelSerializer
 
+from cart.models import Cart, CartItem
 from games.models import CompletedGames, Game, Genre, Platform, PurchaseHistory, Review, Wishlist
 
 
@@ -76,3 +77,23 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ["id", "username", "email", "birth_date", "photo", "date_joined", "is_active"]
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    game_title = serializers.ReadOnlyField(source="game.title")
+
+    class Meta:
+        model = CartItem
+        fields = ["id", "game", "game_title", "quantity", "price", "total_price"]
+
+
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cart
+        fields = ["id", "items", "total"]
+
+    def get_total(self, obj):
+        return sum(item.total_price.amount for item in obj.items.all())
