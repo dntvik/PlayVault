@@ -49,9 +49,11 @@ colorama==0.4.6
     #   click
     #   ipython
     #   tqdm
+crispy-bootstrap5==2024.10
+    # via -r requirements.in
 cron-descriptor==1.4.5
     # via django-celery-beat
-cryptography==43.0.3
+cryptography==44.0.0
     # via social-auth-core
 decorator==5.1.1
     # via ipython
@@ -62,6 +64,7 @@ defusedxml==0.8.0rc2
 django==4.2.16
     # via
     #   -r requirements.in
+    #   crispy-bootstrap5
     #   django-celery-beat
     #   django-crispy-forms
     #   django-debug-toolbar
@@ -82,7 +85,9 @@ django-celery-beat==2.7.0
 django-colorfield==0.11.0
     # via django-admin-interface
 django-crispy-forms==2.3
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   crispy-bootstrap5
 django-debug-toolbar==4.4.6
     # via -r requirements.in
 django-extensions==3.2.3
@@ -96,9 +101,7 @@ django-phonenumber-field==8.0.0
 django-templated-mail==1.1.1
     # via -r requirements.in
 django-timezone-field==7.0
-    # via
-    #   -r requirements.in
-    #   django-celery-beat
+    # via django-celery-beat
 djangorestframework==3.15.2
     # via
     #   djangorestframework-simplejwt
@@ -113,7 +116,7 @@ drf-yasg==1.21.8
     # via -r requirements.in
 executing==2.1.0
     # via stack-data
-faker==33.0.0
+faker==33.1.0
     # via -r requirements.in
 flake8==7.1.1
     # via -r requirements.in
@@ -193,7 +196,7 @@ pyflakes==3.2.0
     # via flake8
 pygments==2.18.0
     # via ipython
-pyjwt==2.10.0
+pyjwt==2.10.1
     # via
     #   djangorestframework-simplejwt
     #   social-auth-core

@@ -48,10 +48,10 @@ def generate_reviews(count):
     faker = Faker()
     Review = apps.get_model("games", "Review")
     Game = apps.get_model("games", "Game")
-    UserProfile = apps.get_model("accounts", "UserProfile")
+    Customer = apps.get_model("accounts", "Customer")
 
     games = list(Game.objects.all())
-    users = list(UserProfile.objects.all())
+    users = list(Customer.objects.all())
 
     if not games or not users:
         raise ValueError("There are no games or users available to create reviews.")
@@ -79,10 +79,10 @@ def generate_reviews(count):
 def generate_wishlist(count):
     Wishlist = apps.get_model("games", "Wishlist")
     Game = apps.get_model("games", "Game")
-    UserProfile = apps.get_model("accounts", "UserProfile")
+    Customer = apps.get_model("accounts", "Customer")
 
     games = list(Game.objects.all())
-    users = list(UserProfile.objects.all())
+    users = list(Customer.objects.all())
 
     if not games or not users:
         raise ValueError("There are no games or users available to create a wishlist.")
