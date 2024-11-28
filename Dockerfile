@@ -9,9 +9,9 @@ WORKDIR /playvault
 COPY .black.toml .black.toml
 COPY .flake8 .flake8
 COPY ./commands ./commands
-COPY ./requirements.in ./requirements.in
+COPY ./requirements.txt ./requirements.txt
 COPY ./src ./src
 
-RUN python -m pip install --upgrade pip pip-tools && pip-compile --upgrade && pip-sync
+RUN python -m pip install --upgrade pip pip-tools && pip-sync
 
 CMD ["bin/sh"]
