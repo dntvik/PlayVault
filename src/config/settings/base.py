@@ -1,7 +1,6 @@
+import os
 from datetime import timedelta
 from pathlib import Path
-
-from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -17,6 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
+    "crispy_bootstrap5",
     "drf_yasg",
     "rest_framework",
     "djoser",
@@ -31,23 +31,16 @@ INSTALLED_APPS = [
     "games.apps.YourAppConfig",
     "cart",
 ]
-AUTH_USER_MODEL = "accounts.UserProfile"
+AUTH_USER_MODEL = "accounts.Customer"
 
 LOGOUT_REDIRECT_URL = "login"
 LOGIN_REDIRECT_URL = "index"
 LOGIN_URL = "login"
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "tik.broth@gmail.com"
-EMAIL_HOST_PASSWORD = "kambftgcwfqigbnt"
-EMAIL_PORT = 587
-EMAIL_FAIL_SILENTLY = False
-
-REGISTRATION_EMAIL_SUBJECT = "PlayVault"
+REGISTRATION_EMAIL_SUBJECT = "PlayVault Registration"
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -55,7 +48,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -68,15 +60,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_URL_NAMESPACE = "social"
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "329003573914-caial94b5uq9mr0bou5nvk07h5h9mal9.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
-SOCIAL_AUTH_TWITTER_KEY = "eHRSaVZBZkxaSzExUUozMzc5VjU6MTpjaQ"
-SOCIAL_AUTH_TWITTER_SECRET = "yalxILs3wRQRP-3qS-hc62aEiY8Xa_YDAJ9p14GDkIxDHnc2qT"
-SOCIAL_AUTH_FACEBOOK_KEY = "1899795200541959"
-SOCIAL_AUTH_FACEBOOK_SECRET = "c99f6937ff3d259d75b1d6a9abaf56f6"
-SOCIAL_AUTH_GITHUB_KEY = "Ov23lidQMERWEWp6tWPO"
-SOCIAL_AUTH_GITHUB_SECRET = "e3a58d5749d7b5c45e39fa679e932e9a05e70b42"
 
 ROOT_URLCONF = "config.urls"
 
@@ -97,6 +80,10 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
@@ -175,8 +162,23 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.associate_by_email",
     "social_core.pipeline.user.create_user",
     # !!!
-    "common.pipeline.cleanup_social_account",
+    "accounts.pipeline.cleanup_social_account",
     "social_core.pipeline.social_auth.associate_user",
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
 )
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_FAIL_SILENTLY = os.environ.get("EMAIL_FAIL_SILENTLY")
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
+SOCIAL_AUTH_GITHUB_KEY = os.environ.get("SOCIAL_AUTH_GITHUB_KEY")
+SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("SOCIAL_AUTH_GITHUB_SECRET")

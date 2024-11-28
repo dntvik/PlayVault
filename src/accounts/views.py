@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.views.generic import CreateView, DetailView, RedirectView
 
 from accounts.forms import UserRegistrationForm
-from accounts.models import UserProfile
+from accounts.models import Customer
 from accounts.tasks import generate_accounts
 from accounts.utils.token_generators import TokenGenerator
 
@@ -60,20 +60,20 @@ class UserLogout(LogoutView):
 
 
 class UserProfileView(DetailView):
-    model = UserProfile
+    model = Customer
     template_name = "user_profile.html"
     context_object_name = "user_profile"
 
     def get_object(self, queryset=None):
         user = get_user_model().objects.get(pk=self.request.user.pk)
         try:
-            return UserProfile.objects.get(user=user)
-        except UserProfile.DoesNotExist:
+            return Customer.objects.get(user=user)
+        except Customer.DoesNotExist:
             return None
 
 
 def generate_accounts_view(request: HttpRequest) -> HttpResponse:
-    model_name = request.GET.get("model_name", "UserProfile")
+    model_name = request.GET.get("model_name", "Customer")
     count = int(request.GET.get("count", 100))
     generate_accounts.delay(model_name, count)
     return HttpResponse(f"Task to generate {count} accounts in {model_name} is started.")

@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -8,7 +9,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from accounts.managers import CustomManager
 
 
-class UserProfile(AbstractBaseUser, PermissionsMixin):
+class Customer(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_("name"), max_length=150, unique=True)
     email = models.EmailField(
         _("email address"),
@@ -37,7 +38,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     objects = CustomManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["username"]
 
     class Meta:
         verbose_name = _("customer")
