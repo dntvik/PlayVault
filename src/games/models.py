@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from djmoney.models.fields import MoneyField
@@ -33,15 +34,23 @@ class Game(models.Model):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        if self.price is None or self.price.amount <= 0:
+            raise ValidationError("The price of the game must be a positive number.")
+
 
 class Review(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
     comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Review by {self.user} on {self.game}"
+
+    class Meta:
+        unique_together = ("game", "user")
 
 
 class PurchaseHistory(models.Model):
@@ -53,6 +62,9 @@ class PurchaseHistory(models.Model):
     def __str__(self):
         return f"{self.user} purchased {self.game} on {self.purchase_date} for {self.price_at_purchase}"
 
+    class Meta:
+        unique_together = ("user", "game")
+
 
 class Wishlist(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -60,6 +72,9 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user}'s wishlist: {self.game}"
+
+    class Meta:
+        unique_together = ("user", "game")
 
 
 class CompletedGames(models.Model):
@@ -69,3 +84,6 @@ class CompletedGames(models.Model):
 
     def __str__(self):
         return f"{self.user} completed {self.game} on {self.completed_date}"
+
+    class Meta:
+        unique_together = ("user", "game")

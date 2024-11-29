@@ -8,18 +8,44 @@
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
+            <label for="name" class="form-label">Full Name</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Your full name" required>
         </div>
+
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="email" class="form-label">Email Address</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
         </div>
+
         <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Your address"></textarea>
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your phone number" required>
         </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Shipping Address</label>
+            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Your shipping address" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="delivery_method" class="form-label">Delivery Method</label>
+            <select class="form-control" id="delivery_method" name="delivery_method" required>
+                <option value="standard">Standard Delivery</option>
+                <option value="express">Express Delivery</option>
+                <option value="pickup">Store Pickup</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="payment_method" class="form-label">Payment Method</label>
+            <select class="form-control" id="payment_method" name="payment_method" required>
+                <option value="credit_card">Credit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank_transfer">Bank Transfer</option>
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Place Order</button>
     </form>
 </div>
-{% endblock content %}
+{% endblock %}

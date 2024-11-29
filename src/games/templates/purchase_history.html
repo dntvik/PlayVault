@@ -6,29 +6,28 @@
     {% if purchase_history %}
         <table class="table">
             <thead>
-            <tr>
-                <th>Game</th>
-                <th>Purchase Date</th>
-                <th>Price at Purchase</th>
-            </tr>
+                <tr>
+                    <th>Game</th>
+                    <th>Purchase Date</th>
+                    <th>Price at Purchase</th>
+                </tr>
             </thead>
             <tbody>
-            {% for purchase in purchase_history %}
-                <tr>
-                    <td>{{ purchase.game.title }}</td>
-                    <td>{{ purchase.purchase_date|date:"Y-m-d" }}</td>
-                    <td>${{ purchase.price_at_purchase }}</td>
-                    <td><a href="{% url 'game_detail' purchase.game.pk %}">{{ purchase.game.title }}</a></td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">You have not purchased any games yet.</td>
-                </tr>
-            {% endfor %}
+                {% for purchase in purchase_history %}
+                    <tr>
+                        <td>{{ purchase.game.title }}</td>
+                        <td>{{ purchase.purchase_date|date:"Y-m-d" }}</td>
+                        <td>${{ purchase.price_at_purchase }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">You have not purchased any games yet.</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>You have no purchase history.</p>
+        <p class="text-center text-muted">You have no purchase history.</p>
     {% endif %}
 
 {% endblock %}

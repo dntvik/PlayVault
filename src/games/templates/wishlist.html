@@ -3,6 +3,14 @@
 {% block content %}
     <h2 class="text-center my-5">Your Wishlist</h2>
 
+    {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="wishlist-items-list">
         {% if wishlist_items %}
             <ul class="list-group">
@@ -17,7 +25,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p>Your wishlist is empty.</p>
+            <p class="text-center text-muted">Your wishlist is empty.</p>
         {% endif %}
     </div>
 

@@ -1,20 +1,19 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, DetailView, RedirectView, UpdateView
 
 from accounts.forms import UserRegistrationForm
 from accounts.models import Customer
+from accounts.services.emails import send_registration_email
 from accounts.tasks import generate_accounts
 from accounts.utils.token_generators import TokenGenerator
-
-
-def send_registration_email(user_instance, request):
-    pass
 
 
 class UserRegistration(CreateView):
@@ -27,6 +26,7 @@ class UserRegistration(CreateView):
         self.object.is_active = False
         self.object.save()
         send_registration_email(user_instance=self.object, request=self.request)
+        messages.success(self.request, "Registration successful! Check your email to activate your account.")
         return super().form_valid(form)
 
 
@@ -38,21 +38,22 @@ class UserActivationView(RedirectView):
             pk = force_str(urlsafe_base64_decode(uuid64))
             current_user = get_user_model().objects.get(pk=pk)
         except (get_user_model().DoesNotExist, ValueError, TypeError):
+            messages.error(request, "Invalid activation link!")
             return HttpResponse("Wrong data!!!")
 
         if current_user and TokenGenerator().check_token(current_user, token):
             current_user.is_active = True
             current_user.save()
-
             login(request, current_user)
-
+            messages.success(request, "Your account has been activated successfully!")
             return super().get(request, *args, **kwargs)
 
+        messages.error(request, "Invalid activation link!")
         return HttpResponse("Wrong data!!!")
 
 
 class UserLogin(LoginView):
-    pass
+    template_name = "login.html"  # Добавьте свой шаблон
 
 
 class UserLogout(LogoutView):
@@ -75,11 +76,17 @@ class EditProfileView(UpdateView):
     success_url = reverse_lazy("profile")
 
     def get_object(self, queryset=None):
-        return get_user_model().objects.get(pk=self.request.user.pk)
+        # Проверка на то, что редактируется профиль текущего пользователя
+        return get_object_or_404(Customer, pk=self.request.user.pk)
+
+    def form_valid(self, form):
+        messages.success(self.request, "Profile updated successfully.")
+        return super().form_valid(form)
 
 
 def generate_accounts_view(request: HttpRequest) -> HttpResponse:
     model_name = request.GET.get("model_name", "Customer")
     count = int(request.GET.get("count", 100))
     generate_accounts.delay(model_name, count)
+    messages.info(request, f"Task to generate {count} accounts in {model_name} is started.")
     return HttpResponse(f"Task to generate {count} accounts in {model_name} is started.")
