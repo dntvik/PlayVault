@@ -1,28 +1,35 @@
 {% extends 'index.html' %}
 {% load static %}
+
 {% block content %}
-<div class="container">
-    <h2>User Profile</h2>
-    <div class="profile-card">
-        <div class="profile-header">
+<div class="container my-5">
+    <h2 class="text-center">User Profile</h2>
+
+    <div class="profile-card p-4 border rounded shadow-sm">
+        <div class="profile-header d-flex align-items-center mb-4">
             {% if user_profile.photo %}
-            <img alt="{{ user_profile.first_name }}" height="50" src="{{ user_profile.photo.url }}"
-                 width="50">
+                <img src="{{ user_profile.photo.url }}" alt="{{ user_profile.user.first_name }}" class="rounded-circle" height="100" width="100">
             {% else %}
-            <p>The profile doesn't have a photo.</p>
+                <div class="profile-placeholder rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                    <span class="text-muted">No Photo</span>
+                </div>
             {% endif %}
-            <h3>{{ user_profile.user.first_name}} {{ user_profile.user.last_name }}</h3>
-            <p>User Type: {{ user_profile.get_user_type_display }}</p>
+            <div class="ml-3">
+                <h3>{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h3>
+                <p class="text-muted"><small>User Type: {{ user_profile.get_user_type_display }}</small></p>
+            </div>
         </div>
-        <div class="profile-details">
-            <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
-            <p><strong>Gender:</strong> {{ user_profile.get_sex_display }}</p>
-            <p><strong>Location:</strong> {{ user_profile.location }}</p>
+
+        <div class="profile-details mb-4">
+            <p><strong>Email:</strong> {{ user_profile.email }}</p>
             <p><strong>Phone Number:</strong> {{ user_profile.phone_number }}</p>
-            <p><strong>Birthday:</strong> {{ user_profile.birthday|date:"Y-m-d" }}</p>
+            <p><strong>Birthday:</strong> {{ user_profile.birth_date|date:"Y-m-d" }}</p>
+
         </div>
+
         <div class="profile-actions">
-            <a class="btn btn-secondary" href="{% url 'index' %}">Back to Home</a>
+            <a href="{% url 'accounts:edit_profile' user_profile.pk%}" class="btn btn-primary">Edit Information</a>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </div>

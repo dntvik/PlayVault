@@ -1,8 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.views.generic import ListView
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.views.generic import DetailView, FormView, ListView
 
-from games.models import CompletedGames, Game, Wishlist
+from games.forms import ReviewForm
+from games.models import CompletedGames, Game, PurchaseHistory, Wishlist
 from games.tasks import generate_games, generate_reviews, generate_wishlist
 
 
@@ -12,9 +15,15 @@ class GameListView(ListView):
     context_object_name = "games"
 
 
+class GameDetailView(DetailView):
+    model = Game
+    template_name = "game_detail.html"
+    context_object_name = "game"
+
+
 class GenreDetailView(ListView):
     model = Game
-    template_name = "genres_list.html"  # Создайте этот шаблон
+    template_name = "genres_detail.html"
     context_object_name = "games"
 
     def get_queryset(self):
@@ -23,7 +32,7 @@ class GenreDetailView(ListView):
 
 class PlatformDetailView(ListView):
     model = Game
-    template_name = "platforms_list.html"
+    template_name = "platforms_detail.html"
     context_object_name = "games"
 
     def get_queryset(self):
@@ -39,6 +48,15 @@ class WishlistView(LoginRequiredMixin, ListView):
         return Wishlist.objects.filter(user=self.request.user)
 
 
+class PurchaseHistoryView(ListView):
+    model = PurchaseHistory
+    template_name = "purchase_history.html"
+    context_object_name = "purchase_history"
+
+    def get_queryset(self):
+        return PurchaseHistory.objects.filter(user=self.request.user)
+
+
 class CompletedGamesView(LoginRequiredMixin, ListView):
     model = CompletedGames
     template_name = "completed_games.html"
@@ -48,9 +66,22 @@ class CompletedGamesView(LoginRequiredMixin, ListView):
         return CompletedGames.objects.filter(user=self.request.user)
 
 
+class AddReviewView(LoginRequiredMixin, FormView):
+    template_name = "game_detail.html"
+    form_class = ReviewForm
+
+    def form_valid(self, form):
+        game = get_object_or_404(Game, pk=self.kwargs["pk"])
+        review = form.save(commit=False)
+        review.game = game
+        review.user = self.request.user
+        review.save()
+        return redirect("games:game_detail", pk=game.pk)
+
+
 def generate_games_view(request):
     count = int(request.GET.get("count", 100))
-    generate_games.delay(count)
+    generate_games.delay("Game", count)
     return HttpResponse(f"Task to generate {count} games has started.")
 
 
@@ -64,3 +95,32 @@ def generate_wishlist_view(request):
     count = int(request.GET.get("count", 100))
     generate_wishlist.delay(count)
     return HttpResponse(f"Task to generate {count} wishlist entries has started.")
+
+
+class AddToWishlistView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        game = get_object_or_404(Game, pk=pk)
+        wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, game=game)
+        return redirect("games:game_detail", pk=pk)
+
+
+# Добавить в Completed Games
+class AddToCompletedGamesView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        game = get_object_or_404(Game, pk=pk)
+        completed_game, created = CompletedGames.objects.get_or_create(user=request.user, game=game)
+        return redirect("games:game_detail", pk=pk)
+
+
+class RemoveFromCompletedGamesView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        completed_game = get_object_or_404(CompletedGames, pk=pk, user=request.user)
+        completed_game.delete()
+        return redirect("games:completed_games")
+
+
+class RemoveFromWishlistView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        wishlist_item = get_object_or_404(Wishlist, pk=pk, user=request.user)
+        wishlist_item.delete()
+        return redirect("games:wishlist")

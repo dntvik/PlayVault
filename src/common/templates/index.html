@@ -1,104 +1,128 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - PlayVault</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
-<body>
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-auto">
-        <div>
-            <h3 class="float-md-start mb-0 bg-success">Welcome to the PlayVault</h3>
-            <nav class="nav nav-masthead justify-content-center float-md-end bg-secondary">
-                {% block header %}
-                    <a aria-current="page" class="nav-link active" href="{% url 'index' %}">Home</a>
-                    <a class="nav-link" href="{% url 'games:game_list' %}">Games</a>
-                    <a class="nav-link" href="{% url 'games:wishlist' %}">Wishlist</a>
-                    <a class="nav-link" href="{% url 'games:completed_games' %}">Completed Games</a>
-                {% endblock header %}
-                <div>
-                    {% if user_profile.is_authenticated %}
-                        <a aria-expanded="false" class="nav-link d-block link-dark text-decoration-none dropdown-toggle"
-                           data-bs-toggle="dropdown"
-                           href="#" id="dropdownUser1">
-                            {% if user_profile.photo %}
-                                <img alt="{{ user_profile.first_name }}" height="50" src="{{ user_profile.photo.url }}"
-                                     width="50">
-                            {% else %}
-                                <img alt="Default Avatar" height="50" src="{% static 'img/default_avatar.jpg' %}"
-                                     width="50">
-                            {% endif %}
-                        </a>
-                        <ul aria-labelledby="dropdownUser1" class="dropdown-menu text-small" style="">
-                            <li><p>Welcome {{ user_profile.first_name|title }}
-                                {{ user_profile.last_name|title }}</p></li>
-                            <li><a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Change Password</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                        </ul>
+<body class="bg-light">
+<!-- Header -->
+<header class="bg-dark text-white py-3 mb-4">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between">
+        <h1 class="mb-0">PlayVault</h1>
+        <nav class="nav nav-pills flex-grow-1 justify-content-center">
+            <a class="nav-link text-white" href="{% url 'index' %}">Home</a>
+            <a class="nav-link text-white" href="{% url 'games:game_list' %}">Games</a>
+            <a class="nav-link text-white" href="{% url 'games:wishlist' %}">Wishlist</a>
+            <a class="nav-link text-white" href="{% url 'games:completed_games' %}">Completed Games</a>
+        </nav>
+        <div class="dropdown">
+            {% if user.is_authenticated %}
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user_profile.photo %}
+                        <img src="{{ user_profile.photo.url }}" alt="{{ user_profile.first_name }}" width="40"
+                             height="40" class="rounded-circle me-2">
                     {% else %}
-                        <a aria-expanded="false" class="nav-link d-block link-dark text-decoration-none dropdown-toggle"
-                           data-bs-toggle="dropdown"
-                           href="#" id="dropdownUser1">
-                            <p>Sing up/Log in</p>
-                        </a>
-                        <ul aria-labelledby="dropdownUser1" class="dropdown-menu text-small" style="">
-                            <li><a class="dropdown-item" href="{% url 'registration' %}">Registration</a></li>
-                            <li><a class="dropdown-item" href="#">Reset Password</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                            <li><a class="dropdown-item" href="{% url 'social:begin' 'google-oauth2' %}">Login with
-                                Google</a></li>
-                            <li><a class="dropdown-item" href="{% url 'social:begin' 'github' %}">Login with
-                                GitHub</a></li>
-
-                        </ul>
+                        <img src="{% static 'img/default_avatar.jpg' %}" alt="Avatar" width="40" height="40"
+                             class="rounded-circle me-2">
                     {% endif %}
-                </div>
-            </nav>
+                    <span>{{ user_profile.first_name }}</span>
+                </a>
+                <ul class="dropdown-menu text-small">
+                    <li><a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            {% else %}
+                <a class="btn btn-outline-light" href="{% url 'login' %}">Login</a>
+                <a class="btn btn-outline-light ms-2" href="{% url 'social:begin' 'github' %}">Login with GitHub</a>
+                <a class="btn btn-outline-light ms-2" href="{% url 'registration' %}">Registration</a>
+            {% endif %}
         </div>
-    </header>
-    {% block content %}
-        <main>
-            <h2>Browse by Genre</h2>
-            <div class="category-grid">
+    </div>
+</header>
+
+{% block content %}
+<!-- Main Content -->
+<main class="container">
+    <div class="row">
+        <!-- Cart Section -->
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">Your cart</span>
+                <span class="badge bg-primary rounded-pill">{{ cart.items|length }}</span>
+            </h4>
+            <ul class="list-group mb-3">
+                {% for item in cart.items %}
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">{{ item.game.title }}</h6>
+                            <small class="text-muted">{{ item.quantity }} x {{ item.price }}</small>
+                        </div>
+                        <span class="text-muted">{{ item.total_price }}</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item d-flex justify-content-center lh-sm">
+                        <small class="text-muted">Your cart is empty</small>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'cart:cart_checkout' %}" class="btn btn-primary w-100">Checkout</a>
+        </div>
+
+        <!-- Genre and Platform Section -->
+        <div class="col-md-8 order-md-1">
+            <h2 class="mb-4">Browse by Genre</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
                 {% for genre in genres %}
-                    <div class="category-item">
-                        <a href="{% url 'genres_list' genre.id %}">
-                            <h3>{{ genre.name }}</h3>
-                            <p>Explore all games in this genre</p>
-                        </a>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ genre.name }}</h5>
+                                <p class="card-text">Explore all games in this genre</p>
+                                <a href="{% url 'genres_list' genre.id %}" class="btn btn-outline-primary">Explore</a>
+                            </div>
+                        </div>
                     </div>
                 {% empty %}
                     <p>No genres available.</p>
                 {% endfor %}
             </div>
 
-            <h2>Browse by Platform</h2>
-            <div class="category-grid">
+            <h2 class="mt-5 mb-4">Browse by Platform</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
                 {% for platform in platforms %}
-                    <div class="category-item">
-                        <a href="{% url 'platforms_list' platform.id %}">
-                            <h3>{{ platform.name }}</h3>
-                            <p>Explore all games on this platform</p>
-                        </a>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ platform.name }}</h5>
+                                <p class="card-text">Explore all games on this platform</p>
+                                <a href="{% url 'platforms_list' platform.id %}" class="btn btn-outline-primary">Explore</a>
+                            </div>
+                        </div>
                     </div>
                 {% empty %}
                     <p>No platforms available.</p>
                 {% endfor %}
             </div>
-        </main>
-    {% endblock content %}
-    <footer>
-        <p>&copy; 2024 PlayVault. All rights reserved.</p>
-    </footer>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3">
+    <p>&copy; 2024 PlayVault. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    <h1 class="text-center my-5">List of Games</h1>
+<h2 class="text-center my-5">Games on {{ platform.name }}</h2>
 
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
         {% for game in games %}
@@ -25,9 +25,10 @@
                     </div>
                 </div>
             </div>
-        {% empty %}
-            <p class="text-center col-12">No games available.</p>
-        {% endfor %}
-    </div>
+        </div>
+    {% empty %}
+        <p class="text-center col-12">No games available on this platform.</p>
+    {% endfor %}
+</div>
 
 {% endblock %}

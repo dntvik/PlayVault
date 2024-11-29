@@ -25,8 +25,10 @@ urlpatterns = (
     [
         path("", IndexView.as_view(), name="index"),
         path("registration/", UserRegistration.as_view(), name="registration"),
+        path("accounts/", include("accounts.urls")),
         path("activate/<str:uuid64>/<str:token>/", UserActivationView.as_view(), name="activate_user"),
         path("login/", UserLogin.as_view(), name="login"),
+        path("cart/", include("cart.urls")),
         path("logout/", UserLogout.as_view(), name="logout"),
         path("profile/", UserProfileView.as_view(), name="user_profile"),
         path("oauth/", include("social_django.urls", namespace="social")),
