@@ -43,7 +43,7 @@
                         <span>{{ user.profile.first_name }}</span>
                     </a>
                     <ul class="dropdown-menu text-small">
-                        <li><a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:user_profile' %}">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -52,7 +52,7 @@
                 {% else %}
                     <a class="btn btn-outline-light" href="{% url 'login' %}">Login</a>
                     <a class="btn btn-outline-light ms-2" href="{% url 'social:begin' 'github' %}">Login with GitHub</a>
-                    <a class="btn btn-outline-light ms-2" href="{% url 'registration' %}">Registration</a>
+                    <a class="btn btn-outline-light ms-2" href="{% url 'accounts:registration' %}">Registration</a>
                 {% endif %}
             </div>
         </div>
@@ -66,10 +66,17 @@
                 <div class="col-md-4 order-md-2 mb-4">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Your cart</span>
-                        <span class="badge bg-primary rounded-pill">{{ cart.items|length if cart.items else 0 }}</span>
+                        <span class="badge bg-primary rounded-pill">
+    {% if cart.items.all %}
+        {{ cart.items.count }}
+    {% else %}
+        0
+    {% endif %}
+
+</span>
                     </h4>
                     <ul class="list-group mb-3">
-                        {% for item in cart.items %}
+                        {% for item in cart.items.all %}
                             <li class="list-group-item d-flex justify-content-between lh-sm">
                                 <div>
                                     <h6 class="my-0">{{ item.game.title }}</h6>

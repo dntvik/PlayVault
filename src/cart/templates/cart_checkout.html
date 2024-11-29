@@ -1,10 +1,44 @@
 {% extends "index.html" %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="container my-5">
     <h1 class="mb-4">Checkout</h1>
     <p>Your cart is almost ready! Complete the form below to finalize your purchase.</p>
 
+    <!-- Display cart items -->
+    {% if cart and cart.items.exists %}
+        <h3>Your Cart</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Game Title</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items.all %}
+                    <tr>
+                        <td>{{ item.game.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.game.price }}</td>
+                        <td>{{ item.game.price|multiply:item.quantity }}</td>  <!-- Assuming you have a custom template filter for multiplication -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display the total price -->
+        <div class="mb-3">
+            <h4>Total: {{ cart.total_price }}</h4>  <!-- Assuming you have a method in Cart model for calculating total price -->
+        </div>
+    {% else %}
+        <p>Your cart is empty. Please add items to your cart before proceeding.</p>
+    {% endif %}
+
+    <!-- Checkout form -->
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
