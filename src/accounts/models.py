@@ -53,4 +53,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     def get_registration_duration(self):
         delta = timezone.now() - self.date_joined
-        return f"Time on site: {delta.days} days, {delta.seconds // 3600} hours"
+        days = delta.days
+        hours = delta.seconds // 3600
+        minutes = (delta.seconds % 3600) // 60
+        return f"Time on site: {days} days, {hours} hours, {minutes} minutes"

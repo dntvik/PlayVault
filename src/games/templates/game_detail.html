@@ -1,68 +1,71 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h2 class="text-center my-5">{{ game.title }}</h2>
+    <div class="container my-5">
+        <h2 class="text-center my-5">{{ game.title }}</h2>
 
-<div class="game-detail">
-    <img src="{{ game.cover_image.url }}" alt="Cover image of {{ game.title }}" class="img-fluid">
-    <p>{{ game.description }}</p>
-    <p><strong>Release Year:</strong> {{ game.release_year }}</p>
-    <p><strong>Price:</strong> ${{ game.price }}</p>
-    <p><strong>Platform:</strong> ${{ game.platform }}</p>
-    <p><strong>Genre:</strong> ${{ game.genre }}</p>
+        <div class="game-detail mb-4">
+            <img src="{{ game.cover_image.url }}" alt="Cover image of {{ game.title }}" class="img-fluid mb-3">
+            <p><strong>Description:</strong> {{ game.description }}</p>
+            <p><strong>Release Year:</strong> {{ game.release_year }}</p>
+            <p><strong>Price:</strong> ${{ game.price }}</p>
+            <p><strong>Platform:</strong> {{ game.platform }}</p>
+            <p><strong>Genre:</strong> {{ game.genre }}</p>
+        </div>
 
-    <div class="d-flex justify-content-between">
-        <a href="{{ game.purchase_link }}" class="btn btn-success" target="_blank">Buy Now</a>
-        <a href="{% url 'games:game_list' %}" class="btn btn-secondary">Back to List</a>
+        <div class="d-flex justify-content-between mb-4">
+            <a href="{{ game.purchase_link }}" class="btn btn-success" target="_blank">Buy Now</a>
+            <a href="{% url 'games:game_list' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+
+        <!-- Add to Wishlist button -->
+        <form method="post" action="{% url 'games:add_to_wishlist' game.pk %}" class="mb-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-warning">Add to Wishlist</button>
+        </form>
+
+        <!-- Add to Completed Games button -->
+        <form method="post" action="{% url 'games:add_to_completed_games' game.pk %}" class="mb-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info">Mark as Completed</button>
+        </form>
+
+        <!-- Add to Cart button -->
+        <form method="post" action="{% url 'games:add_to_cart' game.pk %}" class="mb-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+        </form>
+
+        <!-- Reviews Section -->
+        <div class="reviews mt-5">
+            <h3>Reviews</h3>
+            {% if game.reviews.all %}
+                <ul class="list-unstyled">
+                    {% for review in game.reviews.all %}
+                        <li class="mb-3">
+                            <strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y" }})
+                            <span>Rating: {{ review.rating }}/5</span>
+                            <p>{{ review.content }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reviews yet. Be the first to leave a review!</p>
+            {% endif %}
+        </div>
+
+        <!-- Add Review Form -->
+        {% if user.is_authenticated %}
+            <div class="mt-4">
+                <h4>Add Your Review</h4>
+                <form method="post" action="{% url 'games:add_review' game.pk %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            </div>
+        {% else %}
+            <p><a href="{% url 'accounts:login' %}">Log in</a> to leave a review.</p>
+        {% endif %}
     </div>
-
-    <!-- Add to Wishlist button -->
-    <form method="post" action="{% url 'games:add_to_wishlist' game.pk %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-warning">Add to Wishlist</button>
-    </form>
-
-    <!-- Add to Completed Games button -->
-    <form method="post" action="{% url 'games:add_to_completed_games' game.pk %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-info">Mark as Completed</button>
-    </form>
-
-    <!-- Add to Cart button -->
-    <form method="post" action="{% url 'games:add_to_cart' game.pk %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Add to Cart</button>
-    </form>
-</div>
-
-<!-- Reviews Section -->
-<div class="reviews mt-5">
-    <h3>Reviews</h3>
-    {% if game.reviews.all %}
-        <ul class="list-unstyled">
-            {% for review in game.reviews.all %}
-                <li class="mb-3">
-                    <strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y" }})
-                    <span>Rating: {{ review.rating }}/5</span>
-                    <p>{{ review.content }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No reviews yet. Be the first to leave a review!</p>
-    {% endif %}
-</div>
-
-<!-- Add Review Form -->
-{% if user.is_authenticated %}
-    <h4>Add Your Review</h4>
-    <form method="post" action="{% url 'games:add_review' game.pk %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit Review</button>
-    </form>
-{% else %}
-    <p><a href="{% url 'accounts:login' %}">Log in</a> to leave a review.</p>
-{% endif %}
-
 {% endblock %}

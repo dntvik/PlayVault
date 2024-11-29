@@ -1,14 +1,8 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
-from django.shortcuts import get_object_or_404, redirect
-from django.views import View
 from djmoney.models.fields import MoneyField
 
 from config.settings import base
 from games.models import Game
-
-User = get_user_model()
 
 
 class Cart(models.Model):
@@ -26,7 +20,7 @@ class CartItem(models.Model):
     total_price = MoneyField(max_digits=10, decimal_places=2, default_currency="USD")
 
     def save(self, *args, **kwargs):
-        if not self.price:
-            self.price = self.game.price
+        if self.price is None or self.quantity is None:
+            raise ValueError("Price or quantity cannot be empty.")
         self.total_price = self.price * self.quantity
         super().save(*args, **kwargs)

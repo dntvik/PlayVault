@@ -12,7 +12,7 @@ class IndexView(TemplateView):
         context["genres"] = Genre.objects.all()
         context["platforms"] = Platform.objects.all()
         if self.request.user.is_authenticated:
-            context["user_profile"] = self.request.user
+            context["user_profile"] = self.request.user.profile
         else:
             context["user_profile"] = None
 
