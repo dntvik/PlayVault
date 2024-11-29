@@ -53,7 +53,7 @@ class UserActivationView(RedirectView):
 
 
 class UserLogin(LoginView):
-    template_name = "login.html"  # Добавьте свой шаблон
+    pass
 
 
 class UserLogout(LogoutView):

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F, Sum
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
@@ -83,6 +83,14 @@ class CartView(LoginRequiredMixin, TemplateView):
 class CheckoutView(TemplateView):
     template_name = "cart_checkout.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            cart = Cart.objects.filter(user=request.user).first()
+        else:
+            cart = None
+
+        return render(request, "cart_checkout.html", {"cart": cart})
+
 
 class AddToCartView(LoginRequiredMixin, View):
     def post(self, request, pk):
@@ -94,14 +102,15 @@ class AddToCartView(LoginRequiredMixin, View):
         try:
             cart = get_or_create_cart(request)
 
-            cart_item, created = CartItem.objects.get_or_create(cart=cart, game=game, defaults={"price": game.price})
+            cart_item, created = CartItem.objects.get_or_create(game=game, defaults={"price": game.price})
+            cart.items.add(cart_item)
 
             if not created:
                 cart_item.quantity = F("quantity") + 1
                 cart_item.save()
                 cart_item.refresh_from_db()
 
-            messages.success(request, f"'{game.name}' has been added to your cart!")
+            messages.success(request, f"'{game.title}' has been added to your cart!")
         except InvalidOperation as e:
             return HttpResponse(f"Error when adding to cart: {repr(e)}", status=400)
 
