@@ -1,10 +1,13 @@
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.views.generic import TemplateView
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.serializers import CartSerializer
 from cart.models import Cart, CartItem
 from games.models import Game
 
@@ -25,7 +28,9 @@ class AddToCartAPIView(APIView):
             cart_item.quantity += 1
             cart_item.save()
 
-        return Response({"message": "Game added to cart"}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Game added to cart", "cart_items_count": cart.items.count()}, status=status.HTTP_200_OK
+        )
 
 
 class RemoveFromCartAPIView(APIView):
@@ -33,19 +38,35 @@ class RemoveFromCartAPIView(APIView):
         item_id = kwargs.get("item_id")
         cart_item = get_object_or_404(CartItem, id=item_id)
 
-        if cart_item.cart.user != request.user and cart_item.cart.session_id != request.session.session_key:
+        if (cart_item.cart.user and cart_item.cart.user != request.user) or (
+            cart_item.cart.session_id and cart_item.cart.session_id != request.session.session_key
+        ):
             return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
-        cart_item.delete()
-        return Response({"message": "Item removed from cart"}, status=status.HTTP_204_NO_CONTENT)
+
+class CartView(LoginRequiredMixin, TemplateView):
+    template_name = "cart.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = Cart.objects.filter(user=self.request.user).first()
+        context["cart"] = cart
+        return context
 
 
-class CartAPIView(RetrieveAPIView):
-    serializer_class = CartSerializer
+class CheckoutView(TemplateView):
+    template_name = "cart_checkout.html"
 
-    def get_object(self):
-        if self.request.user.is_authenticated:
-            return get_object_or_404(Cart, user=self.request.user)
-        else:
-            session_id = self.request.session.session_key or self.request.session.create()
-            return get_object_or_404(Cart, session_id=session_id)
+
+class AddToCartView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        game = get_object_or_404(Game, pk=pk)
+
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, game=game, defaults={"price": game.price})
+
+        if not created:
+            cart_item.quantity = F("quantity") + 1
+            cart_item.save()
+
+        return redirect("games.game_detail", pk=game.pk)

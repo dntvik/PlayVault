@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.views.generic import CreateView, DetailView, RedirectView
+from django.views.generic import CreateView, DetailView, RedirectView, UpdateView
 
 from accounts.forms import UserRegistrationForm
 from accounts.models import Customer
@@ -65,11 +65,17 @@ class UserProfileView(DetailView):
     context_object_name = "user_profile"
 
     def get_object(self, queryset=None):
-        user = get_user_model().objects.get(pk=self.request.user.pk)
-        try:
-            return Customer.objects.get(user=user)
-        except Customer.DoesNotExist:
-            return None
+        return get_user_model().objects.get(pk=self.request.user.pk)
+
+
+class EditProfileView(UpdateView):
+    model = Customer
+    fields = ["username", "email", "phone_number", "birth_date", "photo"]
+    template_name = "edit_profile.html"
+    success_url = reverse_lazy("profile")
+
+    def get_object(self, queryset=None):
+        return get_user_model().objects.get(pk=self.request.user.pk)
 
 
 def generate_accounts_view(request: HttpRequest) -> HttpResponse:

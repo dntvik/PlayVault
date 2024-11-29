@@ -1,12 +1,25 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h2>Your Completed Games</h2>
-<ul>
-    {% for game in completed_games %}
-        <li>{{ game.game.title }} - Completed on {{ game.completed_date }}</li>
-    {% empty %}
-        <li>You have not completed any games yet.</li>
-    {% endfor %}
-</ul>
+    <h2 class="text-center my-5">Your Completed Games</h2>
+
+    <div class="completed-games-list">
+        {% if completed_games %}
+            <ul class="list-group">
+                {% for completed_game in completed_games %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ completed_game.game.title }} - Completed on {{ completed_game.completed_date }}</span>
+                        <form method="post" action="{% url 'games:remove_from_completed_games' completed_game.pk %}"
+                              class="d-inline-block">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have not completed any games yet.</p>
+        {% endif %}
+    </div>
+
 {% endblock %}

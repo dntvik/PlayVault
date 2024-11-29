@@ -30,10 +30,10 @@ class Customer(AbstractBaseUser, PermissionsMixin):
             "Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."
         ),
     )
-    phone_number = PhoneNumberField(unique=True)
+    phone_number = PhoneNumberField(unique=True, blank=True, null=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     birth_date = models.DateTimeField(_("birth date"), null=True, blank=True)
-    photo = models.ImageField(upload_to="users_avatars/", default="../static/img/default_avatar.jpg")
+    photo = models.ImageField(upload_to="users_avatars/", default="img/default_avatar.jpg", blank=True, null=True)
 
     objects = CustomManager()
 
@@ -52,4 +52,5 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def get_registration_duration(self):
-        return f"Time on site: {timezone.now() - self.date_joined}"
+        delta = timezone.now() - self.date_joined
+        return f"Time on site: {delta.days} days, {delta.seconds // 3600} hours"

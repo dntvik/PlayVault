@@ -1,8 +1,9 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+
+from accounts.models import Customer
 
 
 class UserRegistrationForm(UserCreationForm):
     class Meta:
-        model = get_user_model()
+        model = Customer
         fields = ["username", "email", "phone_number", "birth_date", "photo", "password1", "password2"]

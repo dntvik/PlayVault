@@ -23,6 +23,12 @@ class GameSerializer(ModelSerializer):
         ]
 
 
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "username", "email", "birth_date", "photo", "date_joined", "is_active"]
+
+
 class GenreSerializer(ModelSerializer):
     class Meta:
         model = Genre
@@ -46,45 +52,39 @@ class ReviewSerializer(ModelSerializer):
         fields = ["id", "game", "user", "rating", "comment"]
 
 
-class PurchaseHistorySerializer(ModelSerializer):
-    user = StringRelatedField()
-    game = StringRelatedField()
+class BaseGameInteractionSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    game = GameSerializer()
 
     class Meta:
-        model = PurchaseHistory
-        fields = ["id", "user", "game", "purchase_date", "price_at_purchase"]
-
-
-class WishlistSerializer(ModelSerializer):
-    user = StringRelatedField()
-    game = StringRelatedField()
-
-    class Meta:
-        model = Wishlist
         fields = ["id", "user", "game"]
 
 
-class CompletedGamesSerializer(ModelSerializer):
-    user = StringRelatedField()
-    game = StringRelatedField()
+class WishlistSerializer(BaseGameInteractionSerializer):
+    class Meta(BaseGameInteractionSerializer.Meta):
+        model = Wishlist
+        fields = BaseGameInteractionSerializer.Meta.fields
 
-    class Meta:
+
+class CompletedGamesSerializer(BaseGameInteractionSerializer):
+    class Meta(BaseGameInteractionSerializer.Meta):
         model = CompletedGames
-        fields = ["id", "user", "game", "completed_date"]
+        fields = BaseGameInteractionSerializer.Meta.fields + ["completed_date"]
 
 
-class UserSerializer(ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ["id", "username", "email", "birth_date", "photo", "date_joined", "is_active"]
+class PurchaseHistorySerializer(BaseGameInteractionSerializer):
+    class Meta(BaseGameInteractionSerializer.Meta):
+        model = PurchaseHistory
+        fields = BaseGameInteractionSerializer.Meta.fields + ["purchase_date", "price_at_purchase"]
 
 
 class CartItemSerializer(serializers.ModelSerializer):
     game_title = serializers.ReadOnlyField(source="game.title")
+    game_id = serializers.ReadOnlyField(source="game.id")
 
     class Meta:
         model = CartItem
-        fields = ["id", "game", "game_title", "quantity", "price", "total_price"]
+        fields = ["id", "game_id", "game_title", "quantity", "price"]
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -96,4 +96,4 @@ class CartSerializer(serializers.ModelSerializer):
         fields = ["id", "items", "total"]
 
     def get_total(self, obj):
-        return sum(item.total_price.amount for item in obj.items.all())
+        return sum(item.price * item.quantity for item in obj.items.all())
