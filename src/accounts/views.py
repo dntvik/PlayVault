@@ -1,10 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.core.mail import send_mail
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, DetailView, RedirectView, UpdateView
@@ -41,13 +40,18 @@ class UserActivationView(RedirectView):
             messages.error(request, "Invalid activation link!")
             return HttpResponse("Wrong data!!!")
 
-        if current_user and TokenGenerator().check_token(current_user, token):
+        if current_user.is_active:
+            messages.info(request, "Your account is already activated.")
+            return HttpResponseRedirect(reverse("index"))
+
+        if TokenGenerator().check_token(current_user, token):
             current_user.is_active = True
             current_user.save()
             login(request, current_user)
             messages.success(request, "Your account has been activated successfully!")
             return super().get(request, *args, **kwargs)
 
+        # Если токен неверный
         messages.error(request, "Invalid activation link!")
         return HttpResponse("Wrong data!!!")
 

@@ -4,6 +4,8 @@ import os
 import subprocess
 import sys
 
+mode = os.getenv("MODE", "dev")
+
 
 def main():
     """Run administrative tasks."""
@@ -13,7 +15,7 @@ def main():
         subprocess.run(["isort", "."])
         subprocess.run(["black", "--config", ".black.toml", "."])
     else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", f"config.settings.{mode}")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
