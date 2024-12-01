@@ -1,4 +1,50 @@
-Hi, {{ user.first_name|title }} {{ user.last_name|title }}.
-<p>Please follow the link to complete the registration !!!</p>
-<a href="http://{{ domain }}{% url 'activate_user' token=token uuid64=uid %}"> Link to registration!!!</a>
-<p> Current time: {{ current_time }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Activation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            color: white;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Hello, {{ user.username|default:"User" }}!</h2>
+    <p>Thank you for registering on our platform.</p>
+    <p>Please click the button below to activate your account:</p>
+    <a href="http://{{ domain }}{% url 'activate_user' token=token uuid64=uid %}" class="btn">Activate Account</a>
+    <p>If the button doesn't work, you can copy and paste the following link into your browser:</p>
+    <p><a href="http://
+            {{ domain }}{% url 'activate_user' token=token uuid64=uid %}">http://{{ domain }}{% url 'activate_user' token=token uuid64=uid %}</a>
+    </p>
+    <p>Current time: {{ current_time }}</p>
+    <hr>
+    <p>Best regards,<br>PlayVault</p>
+</div>
+</body>
+</html>

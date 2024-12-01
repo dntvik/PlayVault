@@ -30,6 +30,6 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / "static"  # NOQA
-STATIC_URL = "static/"
-MEDIA_ROOT = BASE_DIR / "media/"  # NOQA
-MEDIA_URL = "media/"
+STATIC_URL = "/static/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # NOQA
+MEDIA_URL = "/media/"

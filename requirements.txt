@@ -8,7 +8,7 @@ amqp==5.3.1
     # via kombu
 asgiref==3.8.1
     # via django
-asttokens==2.4.1
+asttokens==3.0.0
     # via stack-data
 babel==2.16.0
     # via py-moneyed
@@ -190,7 +190,7 @@ pycodestyle==2.12.1
     # via flake8
 pycparser==2.22
     # via cffi
-pydot==3.0.2
+pydot==3.0.3
     # via -r requirements.in
 pyflakes==3.2.0
     # via flake8
@@ -236,9 +236,7 @@ requests==2.32.3
 requests-oauthlib==2.0.0
     # via social-auth-core
 six==1.16.0
-    # via
-    #   asttokens
-    #   python-dateutil
+    # via python-dateutil
 social-auth-app-django==5.4.2
     # via djoser
 social-auth-core==4.5.4
