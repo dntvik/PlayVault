@@ -18,14 +18,14 @@ services:
     depends_on:
       - postgres
 
-  postgres:
-    image: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    env_file:
-      - .env
+#  postgres:
+#    image: postgres
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - pg_data:/var/lib/postgresql/data
+#    env_file:
+#      - .env
 
 #  pgadmin:
 #    image: dpage/pgadmin4
@@ -79,56 +79,56 @@ services:
     depends_on:
       - backend
 
-  redis:
-    image: redis
-    env_file:
-      - .env
-    restart: on-failure
-    depends_on:
-      - backend
-
-  celery:
-    build: ./
-    container_name: celery_container
-    command: ./commands/start_celery.sh
-    restart: on-failure
-    volumes:
-      - ./src:/playvault
-      - ./commands:/playvault/commands
-      - media_content:/playvault/media
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - backend
-
-  celerybeat:
-    build: ./
-    container_name: celerybeat_container
-    command: ./commands/start_celerybeat.sh
-    restart: on-failure
-    volumes:
-      - ./src:/playvault
-      - ./commands:/playvault/commands
-      - media_content:/playvault/media
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - backend
-
-  flower:
-    build: ./
-    container_name: flower_container
-    volumes:
-      - ./src:/playvault
-    env_file:
-      - .env
-    command: celery -A config flower --broker=redis://redis
-    ports:
-      - "5556:5555"
-    depends_on:
-      - celery
+#  redis:
+#    image: redis
+#    env_file:
+#      - .env
+#    restart: on-failure
+#    depends_on:
+#      - backend
+#
+#  celery:
+#    build: ./
+#    container_name: celery_container
+#    command: ./commands/start_celery.sh
+#    restart: on-failure
+#    volumes:
+#      - ./src:/playvault
+#      - ./commands:/playvault/commands
+#      - media_content:/playvault/media
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
+#      - backend
+#
+#  celerybeat:
+#    build: ./
+#    container_name: celerybeat_container
+#    command: ./commands/start_celerybeat.sh
+#    restart: on-failure
+#    volumes:
+#      - ./src:/playvault
+#      - ./commands:/playvault/commands
+#      - media_content:/playvault/media
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
+#      - backend
+#
+#  flower:
+#    build: ./
+#    container_name: flower_container
+#    volumes:
+#      - ./src:/playvault
+#    env_file:
+#      - .env
+#    command: celery -A config flower --broker=redis://redis
+#    ports:
+#      - "5556:5555"
+#    depends_on:
+#      - celery
 
 #  redisadmin:
 #    image: redislabs/redisinsight
@@ -142,8 +142,8 @@ services:
 #      - redis
 
 volumes:
-  pg_data: { }
-  pg_admin: { }
+#  pg_data: { }
+#  pg_admin: { }
 #  mongo_data: { }
   static_content: { }
   media_content: { }
