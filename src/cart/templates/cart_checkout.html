@@ -1,0 +1,85 @@
+{% extends "index.html" %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Checkout</h1>
+    <p>Your cart is almost ready! Complete the form below to finalize your purchase.</p>
+
+    <!-- Display cart items -->
+    {% if cart and cart.items.exists %}
+        <h3>Your Cart</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Game Title</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items.all %}
+                    <tr>
+                        <td>{{ item.game.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.game.price }}</td>
+                        <td>{{ item.game.price|multiply:item.quantity }}</td>  <!-- Assuming you have a custom template filter for multiplication -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display the total price -->
+        <div class="mb-3">
+            <h4>Total: {{ cart.total_price }}</h4>  <!-- Assuming you have a method in Cart model for calculating total price -->
+        </div>
+    {% else %}
+        <p>Your cart is empty. Please add items to your cart before proceeding.</p>
+    {% endif %}
+
+    <!-- Checkout form -->
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Your full name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your phone number" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Shipping Address</label>
+            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Your shipping address" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="delivery_method" class="form-label">Delivery Method</label>
+            <select class="form-control" id="delivery_method" name="delivery_method" required>
+                <option value="standard">Standard Delivery</option>
+                <option value="express">Express Delivery</option>
+                <option value="pickup">Store Pickup</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="payment_method" class="form-label">Payment Method</label>
+            <select class="form-control" id="payment_method" name="payment_method" required>
+                <option value="credit_card">Credit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank_transfer">Bank Transfer</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+</div>
+{% endblock %}

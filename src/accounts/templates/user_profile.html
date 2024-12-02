@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center">User Profile</h2>
+
+    <div class="profile-card p-4 border rounded shadow-sm">
+        <div class="profile-header d-flex align-items-center mb-4">
+            {% if user_profile.photo %}
+                <img src="{{ user_profile.photo.url }}" alt="{{ user_profile.username }}" class="rounded-circle" height="100" width="100">
+            {% else %}
+                <div class="profile-placeholder rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                    <span class="text-muted">No Photo</span>
+                </div>
+            {% endif %}
+            <div class="ml-3">
+                <h3>{{ user_profile.username }}</h3>
+                <p class="text-muted"><small>User Type: {{ user_profile.get_user_type_display }}</small></p>
+            </div>
+        </div>
+
+        <div class="profile-details mb-4">
+            <p><strong>Email:</strong> {{ user_profile.email }}</p>
+            <p><strong>Phone Number:</strong> {{ user_profile.phone_number }}</p>
+            <p><strong>Birthday:</strong> {{ user_profile.birth_date|date:"Y-m-d" }}</p>
+        </div>
+
+        <div class="profile-actions">
+            <a href="{% url 'accounts:edit_profile' user_profile.pk %}" class="btn btn-primary">Edit Information</a>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

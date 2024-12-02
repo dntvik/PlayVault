@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Your Purchase History</h2>
+
+    {% if purchase_history %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Game</th>
+                    <th>Purchase Date</th>
+                    <th>Price at Purchase</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchase_history %}
+                    <tr>
+                        <td>{{ purchase.game.title }}</td>
+                        <td>{{ purchase.purchase_date|date:"Y-m-d" }}</td>
+                        <td>${{ purchase.price_at_purchase }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">You have not purchased any games yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center text-muted">You have no purchase history.</p>
+    {% endif %}
+
+{% endblock %}
