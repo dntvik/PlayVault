@@ -11,7 +11,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "ec2-13-60-247-80.eu-north-1.compute.amazonaws.com"]
 
 mongoengine.connect(host=os.environ.get("DJANGO_MONGO_CONNECTION"))
 

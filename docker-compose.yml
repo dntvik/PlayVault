@@ -27,42 +27,42 @@ services:
     env_file:
       - .env
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_container
-    restart: on-failure
-    env_file:
-      - .env
-    ports:
-      - '5000:80'
-    volumes:
-      - pg_admin:/var/lib/pgadmin
-    depends_on:
-      - postgres
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    container_name: pgadmin_container
+#    restart: on-failure
+#    env_file:
+#      - .env
+#    ports:
+#      - '5000:80'
+#    volumes:
+#      - pg_admin:/var/lib/pgadmin
+#    depends_on:
+#      - postgres
 
-  mongodb:
-    image: mongo
-    container_name: mongo_db_container
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongo_data:/data/db
-    env_file:
-      - .env
-    restart: on-failure
+#  mongodb:
+#    image: mongo
+#    container_name: mongo_db_container
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - mongo_data:/data/db
+#    env_file:
+#      - .env
+#    restart: on-failure
 
-  mongoadmin:
-    image: mongo-express
-    restart: on-failure
-    container_name: mongo_admin_container
-    ports:
-      - '8081:8081'
-    env_file:
-      - .env
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
+#  mongoadmin:
+#    image: mongo-express
+#    restart: on-failure
+#    container_name: mongo_admin_container
+#    ports:
+#      - '8081:8081'
+#    env_file:
+#      - .env
+#    links:
+#      - mongodb
+#    depends_on:
+#      - mongodb
 
   nginx:
     image: nginx
@@ -130,20 +130,20 @@ services:
     depends_on:
       - celery
 
-  redisadmin:
-    image: redislabs/redisinsight
-    container_name: redisadmin
-    restart: on-failure
-    ports:
-      - "8002:8001"
-    env_file:
-      - .env
-    depends_on:
-      - redis
+#  redisadmin:
+#    image: redislabs/redisinsight
+#    container_name: redisadmin
+#    restart: on-failure
+#    ports:
+#      - "8002:8001"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
 
 volumes:
   pg_data: { }
   pg_admin: { }
-  mongo_data: { }
+#  mongo_data: { }
   static_content: { }
   media_content: { }
