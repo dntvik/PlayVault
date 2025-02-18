@@ -10,11 +10,11 @@ asgiref==3.8.1
     # via django
 asttokens==3.0.0
     # via stack-data
-babel==2.16.0
+babel==2.17.0
     # via py-moneyed
 billiard==4.2.1
     # via celery
-black==24.10.0
+black==25.1.0
     # via -r requirements.in
 build==1.2.2.post1
     # via pip-tools
@@ -22,13 +22,13 @@ celery==5.4.0
     # via
     #   django-celery-beat
     #   flower
-certifi==2024.8.30
+certifi==2025.1.31
     # via requests
 cffi==1.17.1
     # via cryptography
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via requests
-click==8.1.7
+click==8.1.8
     # via
     #   black
     #   celery
@@ -53,15 +53,15 @@ crispy-bootstrap5==2024.10
     # via -r requirements.in
 cron-descriptor==1.4.5
     # via django-celery-beat
-cryptography==44.0.0
+cryptography==44.0.1
     # via social-auth-core
 decorator==5.1.1
     # via ipython
-defusedxml==0.8.0rc2
+defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.16
+django==4.2.19
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -78,21 +78,21 @@ django==4.2.16
     #   djoser
     #   drf-yasg
     #   social-auth-app-django
-django-admin-interface==0.29.2
+django-admin-interface==0.29.4
     # via -r requirements.in
 django-celery-beat==2.7.0
     # via -r requirements.in
-django-colorfield==0.11.0
+django-colorfield==0.12.0
     # via django-admin-interface
 django-crispy-forms==2.3
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
-django-debug-toolbar==4.4.6
+django-debug-toolbar==5.0.1
     # via -r requirements.in
 django-extensions==3.2.3
     # via -r requirements.in
-django-filter==24.3
+django-filter==25.1
     # via -r requirements.in
 django-money==3.5.3
     # via -r requirements.in
@@ -100,13 +100,13 @@ django-phonenumber-field==8.0.0
     # via -r requirements.in
 django-templated-mail==1.1.1
     # via -r requirements.in
-django-timezone-field==7.0
+django-timezone-field==7.1
     # via django-celery-beat
 djangorestframework==3.15.2
     # via
     #   djangorestframework-simplejwt
     #   drf-yasg
-djangorestframework-simplejwt==5.3.1
+djangorestframework-simplejwt==5.4.0
     # via djoser
 djoser==2.3.1
     # via -r requirements.in
@@ -114,25 +114,25 @@ dnspython==2.7.0
     # via pymongo
 drf-yasg==1.21.8
     # via -r requirements.in
-executing==2.1.0
+executing==2.2.0
     # via stack-data
-faker==33.1.0
+faker==36.1.1
     # via -r requirements.in
-flake8==7.1.1
+flake8==7.1.2
     # via -r requirements.in
 flower==2.0.1
     # via -r requirements.in
 gunicorn==23.0.0
     # via -r requirements.in
-humanize==4.11.0
+humanize==4.12.0
     # via flower
 idna==3.10
     # via requests
 inflection==0.5.1
     # via drf-yasg
-ipython==8.30.0
+ipython==8.32.0
     # via -r requirements.in
-isort==5.13.2
+isort==6.0.0
     # via -r requirements.in
 jedi==0.19.2
     # via ipython
@@ -166,17 +166,17 @@ parso==0.8.4
     # via jedi
 pathspec==0.12.1
     # via black
-phonenumbers==8.13.51
+phonenumbers==8.13.55
     # via -r requirements.in
-pillow==11.0.0
+pillow==11.1.0
     # via django-colorfield
 pip-tools==7.4.1
     # via -r requirements.in
 platformdirs==4.3.6
     # via black
-prometheus-client==0.21.0
+prometheus-client==0.21.1
     # via flower
-prompt-toolkit==3.0.48
+prompt-toolkit==3.0.50
     # via
     #   click-repl
     #   ipython
@@ -190,19 +190,19 @@ pycodestyle==2.12.1
     # via flake8
 pycparser==2.22
     # via cffi
-pydot==3.0.3
+pydot==3.0.4
     # via -r requirements.in
 pyflakes==3.2.0
     # via flake8
-pygments==2.18.0
+pygments==2.19.1
     # via ipython
 pyjwt==2.10.1
     # via
     #   djangorestframework-simplejwt
     #   social-auth-core
-pymongo==4.10.1
+pymongo==4.11.1
     # via mongoengine
-pyparsing==3.2.0
+pyparsing==3.2.1
     # via pydot
 pyproject-hooks==1.2.0
     # via
@@ -213,19 +213,18 @@ python-crontab==3.2.0
 python-dateutil==2.9.0.post0
     # via
     #   celery
-    #   faker
     #   python-crontab
 python-slugify==8.0.4
     # via django-admin-interface
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2024.2
+pytz==2025.1
     # via
     #   drf-yasg
     #   flower
 pyyaml==6.0.2
     # via drf-yasg
-redis==5.2.0
+redis==5.2.1
     # via -r requirements.in
 regex==2024.11.6
     # via nltk
@@ -235,13 +234,13 @@ requests==2.32.3
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-six==1.16.0
+six==1.17.0
     # via python-dateutil
-social-auth-app-django==5.4.2
+social-auth-app-django==5.4.3
     # via djoser
-social-auth-core==4.5.4
+social-auth-core==4.5.6
     # via social-auth-app-django
-sqlparse==0.5.2
+sqlparse==0.5.3
     # via
     #   django
     #   django-debug-toolbar
@@ -258,18 +257,17 @@ traitlets==5.14.3
     #   ipython
     #   matplotlib-inline
 typing-extensions==4.12.2
-    # via
-    #   faker
-    #   py-moneyed
-tzdata==2024.2
+    # via py-moneyed
+tzdata==2025.1
     # via
     #   celery
     #   django
     #   django-celery-beat
+    #   faker
     #   kombu
 uritemplate==4.1.1
     # via drf-yasg
-urllib3==2.2.3
+urllib3==2.3.0
     # via requests
 vine==5.1.0
     # via
